@@ -1,26 +1,30 @@
 {
-  "name": "node-seed",
-  "version": "0.0.0",
+  "name": "bundler-identifier-api",
+  "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/app.js",
+    "start:dev": "nodemon --exec babel-node src/app.js",
+    "build": "yarn clean && babel src -s --out-dir dist",
     "clean": "rm -rf ./dist",
-    "build": "babel src -s --out-dir dist",
-    "server": "node ./dist/app",
+    "server": "pm2 start ./dist/app.js",
+    "stop": "pm2 stop all",
+    "kill": "pm2 kill",
+    "monitor": "pm2 monit",
+
     "test": "jest",
     "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/andre682/node-seed.git"
+    "url": "git://github.com/andre682/bundler-identifier-api.git"
   },
   "author": "André Torbitoni <andre.torbitoni@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/andre682/node-seed/issues"
+    "url": "https://github.com/andre682/bundler-identifier-api/issues"
   },
-  "homepage": "https://github.com/andre682/node-seed",
+  "homepage": "https://github.com/andre682/bundler-identifier-api",
   "engines": {
     "node": ">=12.14.1"
   },
@@ -47,6 +51,7 @@
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
+    "pm2": "^4.2.3",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2"
   }
