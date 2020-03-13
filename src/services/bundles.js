@@ -6,7 +6,9 @@ export default class BundlesService {
   async readBundleId({ bundleId }) {
     this.logger.silly(`Reading Bundle Id: ${bundleId}`)
     try {
-      const bundleRecord = await this.bundlesModel.findOne({ bundleId })
+      const bundleRecord = await this.bundlesModel.findOne({
+        bundleId: { $regex: new RegExp(`^${bundleId.toLowerCase()}$`, 'i') },
+      })
       return bundleRecord
     } catch (e) {
       this.logger.error(e)
@@ -17,7 +19,9 @@ export default class BundlesService {
   async setBuildNumber({ bundleId, newBuildNumber }) {
     this.logger.silly(`Looking for bundle (${bundleId})`)
     try {
-      let bundleRecord = await this.bundlesModel.findOne({ bundleId })
+      let bundleRecord = await this.bundlesModel.findOne({
+        bundleId: { $regex: new RegExp(`^${bundleId.toLowerCase()}$`, 'i') },
+      })
       if (!bundleRecord) {
         bundleRecord = await this.initBundle({ bundleId, buildNumber: newBuildNumber })
       } else {
@@ -46,7 +50,9 @@ export default class BundlesService {
   async bumpBuild({ bundleId }) {
     this.logger.silly(`bumping next (${bundleId})`)
     try {
-      let bundleRecord = await this.bundlesModel.findOne({ bundleId })
+      let bundleRecord = await this.bundlesModel.findOne({
+        bundleId: { $regex: new RegExp(`^${bundleId.toLowerCase()}$`, 'i') },
+      })
       if (!bundleRecord) {
         bundleRecord = await this.initBundle({ bundleId })
       }
