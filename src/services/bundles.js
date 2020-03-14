@@ -55,9 +55,10 @@ export default class BundlesService {
       })
       if (!bundleRecord) {
         bundleRecord = await this.initBundle({ bundleId })
+      } else {
+        bundleRecord.buildNumber++
+        bundleRecord = await bundleRecord.save()
       }
-      bundleRecord.buildNumber++
-      bundleRecord = await bundleRecord.save()
       return bundleRecord
     } catch (e) {
       this.logger.error(e)

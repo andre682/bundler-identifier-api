@@ -7,7 +7,8 @@
     "start:dev": "nodemon --exec babel-node src/app.js",
     "build:dev": "yarn clean && babel src -s --out-dir dist",
     "clean": "rm -rf ./dist",
-    "build": "yarn clean && babel src --out-dir dist",
+    "prebuild": "yarn clean",
+    "build": "babel src --ignore node_modules,src/tests --out-dir dist",
     "start": "node ./dist/app.js",
     "server": "pm2 start ./dist/app.js",
     "stop": "pm2 stop all",
@@ -28,6 +29,9 @@
   "homepage": "https://github.com/andre682/bundler-identifier-api",
   "engines": {
     "node": ">=12.14.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
@@ -52,6 +56,7 @@
     "@babel/preset-env": "^7.8.4",
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
+    "mongodb-memory-server": "^6.3.3",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2"
