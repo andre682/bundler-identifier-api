@@ -1,30 +1,27 @@
-# Developer Challenge
+# Bundler Identifier API
 
-## Objective
+**Summary**
 
-The mobile app team needs your help. They are having a hard time making sure that they always assign a unique build number to each of their mobile app builds.
-Your goal is to create a lightweight web service that will help automate the process by deciding what the next build number should be.
+A lightweight API that will help automate the process by deciding what the next build number should be.
 
-A Build Number is represented by an integer and should never be reused on the same mobile app.
+**Description**
 
-- Type: (int) [0..N]
-- Eg: 1, 94, 101
+A REST API to read and increase the build number for a given bundler identifier.
+All data are persisted to a MongoDB databases.
 
-Mobile apps are identified by their Bundle Identifier.
+## Installation
 
-- Type: (string)
-- General Format: com.[COMPANY].[APP-NAME]
-- Eg: com.sagomini.HomeworkChallenge
+```
+$ yarn install
+```
 
-## Server
+## Basic use
 
-### PM2 Scripts:
-
-1. Build scripts
+1. **Build scripts**
    ```
    yarn build
    ```
-2. Run
+2. **Run**
    - `yarn start`: Run as a node service
    - `yarn server`: Start PM2 Process
    - `yarn stop`: Stop PM2 Process
@@ -40,76 +37,135 @@ MONGODB_URI=mongodb://127.0.0.1:27017/bundler_identifier_db_dev?maxPoolSize=100&
 LOG_LEVEL=silly
 ```
 
-### API
+## API
 
-| Endpoint  | Query parameters            |
-| :-------- | :-------------------------- |
-| /api/read | bundle_id                   |
-| /api/set  | bundle_id; new_build_number |
-| /api/bump | bundle_id                   |
+This API contains 3 main endpoints:
 
+| Endpoint  | Method | Query input parameters      | return |
+| :-------- | :----- | :-------------------------- | ------ |
+| /api/read | GET    | bundle_id                   | object |
+| /api/set  | POST   | bundle_id; new_build_number | object |
+| /api/bump | POST   | bundle_id                   | object |
 
-| Parameter        | type    | default   |
-| :--------------- | :------ | --------- |
-| bundle_id        | string  | undefined |
-| new_build_number | integer | 0         |
+A Build Number is represented by an integer and should never be reused on the same mobile app.
 
+- Type: (int) [0..N]
+- Eg: 1, 94, 101
 
-### Tech Stack
+Mobile apps are identified by their Bundle Identifier.
 
-Please use the following libraries/frameworks/tools to solve this challenge.
+- Type: (string)
+- General Format: com.[COMPANY].[APP-NAME]
+- Eg: com.sagomini.HomeworkChallenge
+  
 
-### Backend
+all endpoints will return the bundle object:
 
-- Express.js
-- Node.js
-- PM2
-- MongoDB
+| field name  | type   |
+| :---------- | :----- |
+| bundleId    | string |
+| buildNumber | string |
+| createdAt   | string |
+| updatedAt   | string |
 
-You are welcome to use additional open source projects that are not included in this list.
+### Reading Bundles IDs */api/read*
 
-## Task
+This endpoint will receive a bundle identifier as a query parameter and will return the corresponding object containing its current build number.
 
-Create a REST API to read and increase the build number for a given bundler identifier.
-All data should be persisted to a MongoDB databases.
+If the bundle does not exists, the api will return a `204 No content` status.
 
-REST API
+**parameters**
 
-- /api/read [GET]
-  - params: bundle_id (string)
-  - return:
-    - if bundle_id exists
-- build number (int) - else
-- 4xx
-- /api/set [POST]
-  - params:
-    - bundle_id (string)
-    - new_build_number (int)
-  - biz logic
-    - if bundle_id does not exist:
-- create bundle_id
-- if new_build_number not set:
-  - build_number = 0
-- else:
-  - build_number = new_build_number
-    - If new_build_number > existing_build_number
-- existing_build_number = new_build_number
-  - return:
-    - success: 200
-    - else: 4xx
-- /api/bump [POST]
-  - params: bundle_id (string)
-  - biz logic
-    - if bundle_id does not exist.
-- create and init build_number = 0; - build_number++
-  - return
-    - build_number (int)
+| Query parameters |  type  | required | default |
+| :--------------- | :----: | :------: | :-----: |
+| bundle_id        | string |   true   |         |
 
-## Tests:
+**example**:
 
 ```
-$ yarn test
+URL: /api/read?bundle_id=com.sagomini.HomeworkChallenge
+Content-Type: application/json; charset=utf-8
+Method: GET
 
+```
+
+```
+{
+  "bundleId":"com.sagomini.homeworkchallenge",
+  "buildNumber":3,
+  "createdAt":"2020-03-12T20:12:25.628Z",
+  "updatedAt":"2020-03-12T20:21:44.212Z"
+}
+```
+
+### Setting Bundles */api/set*
+
+This endpoint will define a build number for an existing bundle.
+If the bundle id does not exist, it will be created with the specified `new_build_number`.
+
+> *It is not possible to set a value lower than the current number.
+
+**parameters**
+
+| Query parameters |  type  | required | default |
+| :--------------- | :----: | :------: | :-----: |
+| bundle_id        | string |   true   |         |
+| new_build_number | string |  false   |    0    |
+
+**example**:
+
+```
+URL: /api/set?bundle_id=com.sagomini.HomeworkChallenge&new_build_number=5
+Content-Type: application/json; charset=utf-8
+Method: POST
+
+```
+
+```
+{
+  "bundleId":"com.sagomini.homeworkchallenge",
+  "buildNumber":5,
+  "createdAt":"2020-03-12T20:12:25.628Z",
+  "updatedAt":"2020-03-12T20:21:44.212Z"
+}
+```
+
+### Bump builds */api/bump*
+
+This endpoint will bump a +1 into the build number
+If the bundle id does not exist, it will be created starting with 0.
+
+**parameters**
+
+| Query parameters |  type  | required | default |
+| :--------------- | :----: | :------: | :-----: |
+| bundle_id        | string |   true   |         |
+
+**example**:
+
+```
+URL: /api/bump?bundle_id=com.sagomini.HomeworkChallenge
+Content-Type: application/json; charset=utf-8
+Method: POST
+
+```
+
+```
+{
+  "bundleId":"com.sagomini.homeworkchallenge",
+  "buildNumber":6,
+  "createdAt":"2020-03-12T20:12:25.628Z",
+  "updatedAt":"2020-03-12T20:21:44.212Z"
+}
+```
+
+## Tests
+
+```
+yarn test
+```
+
+```
   Status endpoint
     ✓ check API status (28ms)
   /set endpoint
