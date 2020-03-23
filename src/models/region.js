@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining Region model')
-  const Region = sequelize.define(
-    'Region',
+  const region = sequelize.define(
+    'region',
     {
       // Model attributes
       name: {
@@ -17,5 +17,5 @@ export default sequelize => {
       // model options
     }
   )
-  return Region
+  return region
 }

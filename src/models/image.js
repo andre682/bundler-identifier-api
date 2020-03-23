@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining Image model')
-  const Image = sequelize.define(
-    'Image',
+  const image = sequelize.define(
+    'image',
     {
       // Model attributes
       title: {
@@ -25,5 +25,5 @@ export default sequelize => {
       // model options
     }
   )
-  return Image
+  return image
 }

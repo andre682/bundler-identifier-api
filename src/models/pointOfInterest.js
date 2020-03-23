@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining PointOfInterest model')
-  const PointOfInterest = sequelize.define(
-    'PointOfInterest',
+  const pointOfInterest = sequelize.define(
+    'point_of_interest',
     {
       // Model attributes
       title: {
@@ -17,5 +17,5 @@ export default sequelize => {
       // model options
     }
   )
-  return PointOfInterest
+  return pointOfInterest
 }

@@ -36,6 +36,7 @@ export default async ({ expressApp }) => {
   bottle.service('Image', Image(bottle.container.sequelize))
   bottle.service('PointOfInterest', PointOfInterest(bottle.container.sequelize))
   bottle.service('PointOfInterestType', PointOfInterestType(bottle.container.sequelize))
+  // Setup database relations
   dbRelations(bottle.container.sequelize)
 
   // bottle.service('Post', Post(bottle.container.sequelize))

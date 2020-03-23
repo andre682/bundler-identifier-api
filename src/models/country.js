@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining Country model')
-  const Country = sequelize.define(
-    'Country',
+  const country = sequelize.define(
+    'country',
     {
       // Model attributes
       continent: {
@@ -25,5 +25,5 @@ export default sequelize => {
       // model options
     }
   )
-  return Country
+  return country
 }

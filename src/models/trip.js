@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining Trip model')
-  const Trip = sequelize.define(
-    'Trip',
+  const trip = sequelize.define(
+    'trip',
     {
       // Model attributes
       title: {
@@ -17,5 +17,5 @@ export default sequelize => {
       // model options
     }
   )
-  return Trip
+  return trip
 }

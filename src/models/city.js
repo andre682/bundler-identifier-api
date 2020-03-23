@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining City model')
-  const City = sequelize.define(
-    'City',
+  const city = sequelize.define(
+    'city',
     {
       // Model attributes
       name: {
@@ -17,7 +17,5 @@ export default sequelize => {
       // model options
     }
   )
-  City.belongsTo( sequelize.models.Region)
-  City.hasMany( sequelize.models.Destination)
-  return City
+  return city
 }

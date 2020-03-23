@@ -4,8 +4,8 @@ import bottle from '../loaders/bottle'
 export default sequelize => {
   const logger = bottle.container.logger
   logger.debug('defining Pathway model')
-  const Pathway = sequelize.define(
-    'Pathway',
+  const pathway = sequelize.define(
+    'pathway',
     {
       // Model attributes
       vehicle: {
@@ -13,7 +13,7 @@ export default sequelize => {
         allowNull: false,
       },
       wayPoints: {
-        type: DataTypes.ARRAY,
+        type: DataTypes.STRING, //Should be an array
         allowNull: true,
       }
     },
@@ -21,6 +21,5 @@ export default sequelize => {
       // model options
     }
   )
-  //Pathway.belongsTo(sequelize.models.City)
-  return Pathway
+  return pathway
 }
