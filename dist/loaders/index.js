@@ -17,15 +17,16 @@ var _bottle = _interopRequireDefault(require("./bottle"));
 
 var _logger = _interopRequireDefault(require("./logger"));
 
-var _mongoose = _interopRequireDefault(require("./mongoose"));
+var _sequelize = _interopRequireDefault(require("./sequelize"));
 
-var _bundle = _interopRequireDefault(require("../models/bundle"));
+var _posts = _interopRequireDefault(require("../models/posts"));
 
-var _bundles = _interopRequireDefault(require("../services/bundles"));
+var _posts2 = _interopRequireDefault(require("../services/posts"));
 
+// Importing Models & Services
 var _default = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref2) {
-    var expressApp, logger, mongoConnection;
+    var expressApp, logger, sequelizeInstance;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -37,30 +38,38 @@ var _default = /*#__PURE__*/function () {
               return _logger["default"];
             });
 
-            logger = _bottle["default"].container.logger;
+            logger = _bottle["default"].container.logger; //load database(
+
             _context.next = 5;
-            return (0, _mongoose["default"])();
+            return (0, _sequelize["default"])();
 
           case 5:
-            mongoConnection = _context.sent;
-            logger.info('DB loaded and connected!'); //load express
+            sequelizeInstance = _context.sent;
 
-            _context.next = 9;
+            _bottle["default"].factory('sequelize', function () {
+              return sequelizeInstance;
+            }); // Load models
+            // Posts
+
+
+            _bottle["default"].factory('postModel', function (container) {
+              return new _posts["default"](container.sequelize);
+            }); // Load services
+            // Posts
+
+
+            _bottle["default"].factory('postService', function (container) {
+              return new _posts2["default"](container);
+            }); //load express
+
+
+            _context.next = 11;
             return (0, _express["default"])({
               app: expressApp
             });
 
-          case 9:
-            logger.info('Express loaded'); // Load models
-
-            _bottle["default"].factory('bundlesModel', function () {
-              return _bundle["default"];
-            }); // Load services
-
-
-            _bottle["default"].factory('bundlesService', function (container) {
-              return new _bundles["default"](container);
-            });
+          case 11:
+            logger.info('Express loaded');
 
           case 12:
           case "end":
