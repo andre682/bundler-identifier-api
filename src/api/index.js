@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import posts from './routes/posts'
+import bundles from './routes/bundle'
 
 export default () => {
   const app = Router()
-  posts(app)
+  bundles(app)
   return app
 }
