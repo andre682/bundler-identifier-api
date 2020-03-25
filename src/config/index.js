@@ -22,10 +22,14 @@ export default {
     prefix: '/api',
   },
   /**
-   * MongoDB string
+   * POstgreSQL string
    */
-  databaseURL: process.env.MONGODB_URI,
-
+  database: {
+    database: process.env.DATABASE,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    host: process.env.DB_HOST,
+  },
   /**
    * winston logger level
    */
